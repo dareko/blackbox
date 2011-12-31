@@ -1,10 +1,108 @@
-Rem
-Rem
-Rem     ______     __         ______     ______     __  __     ______     ______     __  __    
-Rem    /\  == \   /\ \       /\  __ \   /\  ___\   /\ \/ /    /\  == \   /\  __ \   /\_\_\_\   
-Rem    \ \  __<   \ \ \____  \ \  __ \  \ \ \____  \ \  _"-.  \ \  __<   \ \ \/\ \  \/_/\_\/_  
-Rem     \ \_____\  \ \_____\  \ \_\ \_\  \ \_____\  \ \_\ \_\  \ \_____\  \ \_____\   /\_\/\_\ 
-Rem      \/_____/   \/_____/   \/_/\/_/   \/_____/   \/_/\/_/   \/_____/   \/_____/   \/_/\/_/ 
-Rem                                                                                            
-Rem
+# Getting Started
+
+Calls to @bx always accept two arguments, first being one of embedded query name, table/view or custom query. Second a grep expression, direct ID or custom query.
+
+Both arguments must be provided at all times:
+    @bx sql;n=10 ;active
+
+Should any of the arguments contain spaces, wrap the whole one within double quotes:
+    @bx "sql;w=sql_text like '%hr.emp%'" .
+
+Remember that beyond what you see, each report is a grid with semi-colon as column seperator, so you can easily match beginning and end of columns with it. Just make sure you double last semi-colon if at argument's end (SQL*Plus eats last one):
+    @bx ses ;active
+    @bx usr sys;;
+
+Blackbox always matches all columns using regular expression. Call below will list match all services with "oltp" somewhere in their name. Case is meaningless here:
+    @bx svc oLtP
+
+First argument can be embedded query, arbitrary table or just any select. Just remember that built-in queries are the best, have unified units and most accurate choice of columns:
+    @bx ses .
+    @bx gv$session .
+    @bx "select * from gv$session" .
+
+Similarly, second argument can be a filter, a list of IDs or a select (IDs are defined only within embedded queries as ID_ columns). To negate grep value (-v) just prefix the filter with exclamation mark (!). Your own session is aliased with ~. See below:
+    @bx ses inactive
+    @bx ses =285,364,1218
+    @bx ses !background
+    @bx ses ~
+    @bx ses "select sid from v$mystat"
+
+You can quickly browse through the list of embedded reports with DEF, it will show Blackbox queries as "not implemented":
+SQL> def
+DEFINE AAS = not implemented (BUFFER)
+... 
+
+# Examples
+
+## Sessions
+List all sessions
+    @bx ses .
+
+List all active sessions
+    @bx ses ;active
+    @bx ses;w=status='ACTIVE' .
+
+List waits for all background sessions
+    @bx seswa backgr
+
+Show session I/O on RAC instances 2 and 3
+    @bx sesio;i=2,3 .
+
+List top 30 non-idle wait events sorted by average wait descending
+    @bx sesev;n=30;s=-average_wait !idle
+
+Show wait history of your session
+    @bx seswah ~
+    @bx seswah "select sid from v$mystat"
+
+List top 3 wait events for each session (11g)
+    @bx sesev;n=3/sid/-time_waited_micro .
+
+## Users
+Show users containing SCOTT or HR
+    @bx usr scott|hr
+
+List usernames ending with SYS
+    @bx usr sys;;
+
+## Performance
+Display last ADDM report
+    @bx addm .
+
+## SQL
+Show top 10 most expensive queries
+    @bx sql;n=10 .
+
+Display execution plan
+    @bx plan 36dwj7htgchw0
+
+Show statement with the highest cost in JDBC module
+    @bx sql;n=1;s=-cost jdbc
+
+## System
+Show system memory parameters
+    @bx par target
+
+Show system physical metrics
+    @bx sysmet physical
+
+Show commits and rollbacks for each service
+    @bx svcstat commits|rollbacks
+
+Display system uptime
+    @bx uptime .
+
+List online log files
+    @bx v$logfile .
+
+## Schema
+
+List counts for all object types in database (auto GROUP BY)
+    @bx obj;c=object_type,count(*) .
+
+Object types sorted by count desc (yes, spaces are meaningless to SQL*Plus sometimes)
+    @bx obj;c=object_type,count(*)c;s=-c .
+
+List tables of HR user
+    @bx tab;w=owner='HR' .
 
