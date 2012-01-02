@@ -53,7 +53,8 @@ Rem      FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 Rem      OR OTHER DEALINGS IN THE SOFTWARE. 
 Rem
 
-set term off lin 180 def '&'
+set term off lin 180 def '&' trimsp on trimout on 
+set pages 0 emb on newp none
 
 var vsc clob
 var vtc clob
@@ -391,6 +392,7 @@ col sql_text_frag for a25 tru
 col stale_blocks for a10 hea STALE|BLOCKS
 col startup_time hea STARTUP|TIME
 col stat_value for a10
+col status for a10
 col subpart for 999 hea SUB|PART
 col subpartition_count for a4
 col subprogram_id for 999 
@@ -2423,4 +2425,3 @@ set term on
 print rc
 cl col
 --- Blackbox Ends Here --------------------------------------------------------
-
