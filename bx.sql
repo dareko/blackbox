@@ -180,6 +180,7 @@ col extent_management hea EXTENT|MANAGEMENT
 col extents for a10
 col failed_req# for a10 hea FAILED|REQ#
 col failure_count for a10 hea FAILURE|COUNT
+col feature_name for a60
 col fetches for a8 
 col file_name for a60 
 col first_seen for a20 tru
@@ -384,6 +385,7 @@ col soft_parses for a10 hea SOFT|PARSES
 col space_limit for a10 hea SPACE|LIMIT
 col space_reclaimable hea SPACE|RECLAIMABLE
 col space_used for a10 hea SPACE|USED
+col stat_name for a60
 col sql_feature for a30
 col sql_id for a14 
 col sql_text for a80
@@ -398,6 +400,7 @@ col subpartition_count for a4
 col subprogram_id for 999 
 col succ_req# for a10 hea SUCC|REQ#
 col suggested_action for a40 tru hea SUGGESTED|ACTION
+col sw_date for a14
 col sysdate for a14
 col systimestamp for a35
 col table_name for a40
@@ -405,6 +408,7 @@ col tables for a10
 col tablespace_name for a15 hea TABLESPACE|NAME
 col tablespaces for a11
 col target for a30
+col target_desc for a30
 col task_name for a30
 col temp_blocks for a10 hea TEMP|BLOCKS
 col tempfiles for a10
